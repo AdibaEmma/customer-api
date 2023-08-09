@@ -4,16 +4,41 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @SpringBootApplication
 @RestController
 public class App {
+
+    private static List<Customer> mockCustomers;
+
+    static  {
+        mockCustomers = new ArrayList<>();
+        var alex = new Customer(
+                1,
+                "Alex",
+                "alex@gmail.com",
+                21
+        );
+
+        var jamila = new Customer(
+                2,
+                "Jamila",
+                "jamila@gmail.com",
+                19
+        );
+
+        mockCustomers.add(alex);
+        mockCustomers.add(jamila);
+    }
+
     public static void main(String[] args) {
         SpringApplication.run(App.class, args);
     }
 
-    class Customer {
+    static class Customer {
         private Integer id;
         private String name;
         private String email;
