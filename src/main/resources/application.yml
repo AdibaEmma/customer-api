@@ -2,3 +2,17 @@ server:
   port: 8000
   error:
     include-message: always
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:4332/customer
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+    show-sql: false
