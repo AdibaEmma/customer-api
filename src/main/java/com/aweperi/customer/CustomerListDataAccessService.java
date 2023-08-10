@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public class CustomerDataAccessService implements CustomerDao {
+public class CustomerListDataAccessService implements CustomerDao {
     private static List<Customer> mockCustomers;
 
     static  {
@@ -31,12 +31,12 @@ public class CustomerDataAccessService implements CustomerDao {
     }
 
     @Override
-    public List<Customer> returnAllCustomers() {
+    public List<Customer> selectAllCustomers() {
          return mockCustomers;
     }
 
     @Override
-    public Optional<Customer> returnCustomerById(Integer id) {
+    public Optional<Customer> selectCustomerById(Integer id) {
         return mockCustomers.stream()
                 .filter(customer -> customer.getId().equals(id))
                 .findFirst();
