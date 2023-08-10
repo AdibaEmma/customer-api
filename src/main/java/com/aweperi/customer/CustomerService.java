@@ -1,5 +1,6 @@
 package com.aweperi.customer;
 
+import com.aweperi.exception.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,7 +23,7 @@ public class CustomerService implements ICustomerService {
     public Customer getCustomer(Integer id) {
         return customerDao.returnCustomerById(id)
                 .orElseThrow(() ->
-                new IllegalArgumentException(
+                new ResourceNotFoundException(
                         "Customer with id [%s] not found".formatted(id)));
     }
 }
