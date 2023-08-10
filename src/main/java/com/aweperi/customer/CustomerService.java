@@ -1,7 +1,10 @@
 package com.aweperi.customer;
 
+import org.springframework.stereotype.Service;
+
 import java.util.List;
 
+@Service
 public class CustomerService implements ICustomerService {
 
     private final CustomerDao customerDao;
