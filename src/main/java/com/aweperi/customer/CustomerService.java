@@ -44,4 +44,13 @@ public class CustomerService implements ICustomerService {
                         .build()
         );
     }
+
+    @Override
+    public void deleteCustomer(Integer id) {
+        if (!customerDao.customerIdExists(id)) {
+            throw new ResourceNotFoundException(
+                    "customer with id [%s] not found".formatted(id));
+        }
+        customerDao.removeCustomerById(id);
+    }
 }

@@ -52,4 +52,17 @@ public class CustomerListDataAccessService implements CustomerDao {
         return mockCustomers.stream()
                 .anyMatch(c -> c.getEmail().equals(email));
     }
+
+    @Override
+    public boolean customerIdExists(Integer id) {
+        return mockCustomers.stream()
+                .anyMatch(c -> c.getId().equals(id));
+    }
+
+    @Override
+    public void removeCustomerById(Integer id) {
+        mockCustomers = mockCustomers.stream()
+                .filter(c -> !c.getId().equals(id))
+                .toList();
+    }
 }
