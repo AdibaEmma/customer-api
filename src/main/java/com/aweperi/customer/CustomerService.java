@@ -1,5 +1,6 @@
 package com.aweperi.customer;
 
+import com.aweperi.exception.DuplicateResourceException;
 import com.aweperi.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -25,11 +26,22 @@ public class CustomerService implements ICustomerService {
         return customerDao.selectCustomerById(id)
                 .orElseThrow(() ->
                 new ResourceNotFoundException(
-                        "Customer with id [%s] not found".formatted(id)));
+                        "customer with id [%s] not found".formatted(id)));
     }
 
     @Override
     public void addCustomer(CustomerRegistrationRequest customerRegistrationRequest) {
+        String customerEmail = customerRegistrationRequest.email();
+        if (customerDao.customerEmailExists(customerEmail)) {
+            throw new DuplicateResourceException("email already taken");
+        }
 
+        customerDao.insertCustomer(
+                Customer.builder()
+                        .name(customerRegistrationRequest.name())
+                        .email(customerEmail)
+                        .age(customerRegistrationRequest.age())
+                        .build()
+        );
     }
 }

@@ -1,12 +1,14 @@
 package com.aweperi.customer;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 
 import java.util.Objects;
 
 @Getter
 @Entity
+@Builder
 public class Customer {
     @Id
     @SequenceGenerator(

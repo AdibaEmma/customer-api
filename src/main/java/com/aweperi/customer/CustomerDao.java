@@ -7,5 +7,5 @@ public interface CustomerDao {
     List<Customer> selectAllCustomers();
     Optional<Customer> selectCustomerById(Integer id);
     void insertCustomer(Customer customer);
-
+    boolean customerEmailExists(String email);
 }

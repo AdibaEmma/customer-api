@@ -46,4 +46,10 @@ public class CustomerListDataAccessService implements CustomerDao {
     public void insertCustomer(Customer customer) {
         mockCustomers.add(customer);
     }
+
+    @Override
+    public boolean customerEmailExists(String email) {
+        return mockCustomers.stream()
+                .anyMatch(c -> c.getEmail().equals(email));
+    }
 }
