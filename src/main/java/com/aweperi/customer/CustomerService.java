@@ -27,4 +27,9 @@ public class CustomerService implements ICustomerService {
                 new ResourceNotFoundException(
                         "Customer with id [%s] not found".formatted(id)));
     }
+
+    @Override
+    public void addCustomer(CustomerRegistrationRequest customerRegistrationRequest) {
+
+    }
 }
