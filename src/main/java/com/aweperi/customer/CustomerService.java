@@ -1,5 +1,6 @@
 package com.aweperi.customer;
 
+import com.aweperi.exception.RequestValidationException;
 import com.aweperi.exception.DuplicateResourceException;
 import com.aweperi.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -43,6 +44,23 @@ public class CustomerService implements ICustomerService {
                         .age(customerRegistrationRequest.age())
                         .build()
         );
+    }
+
+    @Override
+    public void updateCustomer(Integer id, CustomerUpdateRequest updateRequest) {
+        Customer foundCustomer = getCustomer(id);
+        if (
+                foundCustomer.getName().equals(updateRequest.name())
+                && foundCustomer.getEmail().equals(updateRequest.email())
+                && foundCustomer.getAge().equals(updateRequest.age())
+        ) {
+            throw new RequestValidationException("could not perform update");
+        }
+        foundCustomer.setName(updateRequest.name());
+        foundCustomer.setEmail(updateRequest.email());
+        foundCustomer.setAge(updateRequest.age());
+
+        customerDao.updateCustomer(foundCustomer);
     }
 
     @Override

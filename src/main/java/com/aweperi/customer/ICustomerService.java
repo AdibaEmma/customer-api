@@ -7,5 +7,6 @@ public interface ICustomerService {
     Customer getCustomer(Integer id);
 
     void addCustomer(CustomerRegistrationRequest customerRegistrationRequest);
+    void updateCustomer(Integer id, CustomerUpdateRequest updateRequest);
     void deleteCustomer(Integer id);
 }

@@ -27,10 +27,12 @@ public class CustomerController {
         customerService.addCustomer(request);
     }
 
-    @RequestMapping(
-            value = "/{id}",
-            method={RequestMethod.DELETE, RequestMethod.GET}
-    )
+    @PutMapping("/{id}")
+    public void updateCustomer(@PathVariable("id") Integer id, @RequestBody CustomerUpdateRequest request) {
+        customerService.updateCustomer(id, request);
+    }
+
+    @DeleteMapping("/{id}")
     public void deleteCustomer(@PathVariable("id") Integer id) {
         customerService.deleteCustomer(id);
     }

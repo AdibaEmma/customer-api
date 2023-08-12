@@ -65,4 +65,22 @@ public class CustomerListDataAccessService implements CustomerDao {
                 .filter(c -> !c.getId().equals(id))
                 .toList();
     }
+
+    @Override
+    public void updateCustomer(Customer update) {
+        List<Customer> newList = new ArrayList<>(mockCustomers.stream()
+                .filter(c -> !c.getId().equals(update.getId()))
+                .toList());
+
+        Customer customerToUpdate = mockCustomers.stream()
+                .filter(c -> c.getId().equals(update.getId()))
+                .findFirst().get();
+
+        customerToUpdate.setName(update.getName());
+        customerToUpdate.setEmail(update.getEmail());
+        customerToUpdate.setAge(update.getAge());
+
+        newList.add(customerToUpdate);
+        mockCustomers = newList;
+    }
 }
