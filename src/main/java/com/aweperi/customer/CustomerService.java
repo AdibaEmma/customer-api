@@ -49,16 +49,29 @@ public class CustomerService implements ICustomerService {
     @Override
     public void updateCustomer(Integer id, CustomerUpdateRequest updateRequest) {
         Customer foundCustomer = getCustomer(id);
-        if (
-                foundCustomer.getName().equals(updateRequest.name())
-                && foundCustomer.getEmail().equals(updateRequest.email())
-                && foundCustomer.getAge().equals(updateRequest.age())
-        ) {
+        boolean changes = false;
+
+        if (updateRequest.name() != null && !foundCustomer.getName().equals(updateRequest.name())) {
+            foundCustomer.setName(updateRequest.name());
+            changes = true;
+        }
+
+        if (updateRequest.email() != null && !foundCustomer.getEmail().equals(updateRequest.email())) {
+            if (customerDao.customerEmailExists(updateRequest.email())) {
+                throw new DuplicateResourceException("email already taken");
+            }
+            foundCustomer.setEmail(updateRequest.email());
+            changes = true;
+        }
+
+        if (updateRequest.age() != null && !foundCustomer.getAge().equals(updateRequest.age())) {
+            foundCustomer.setAge(updateRequest.age());
+            changes = true;
+        }
+
+        if (!changes) {
             throw new RequestValidationException("could not perform update");
         }
-        foundCustomer.setName(updateRequest.name());
-        foundCustomer.setEmail(updateRequest.email());
-        foundCustomer.setAge(updateRequest.age());
 
         customerDao.updateCustomer(foundCustomer);
     }
