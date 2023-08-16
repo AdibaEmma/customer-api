@@ -11,10 +11,17 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class CustomerJDBCDataAccessService implements CustomerDao{
     private final JdbcTemplate jdbcTemplate;
+    private final CustomerRowMapper customerRowMapper;
 
     @Override
     public List<Customer> selectAllCustomers() {
-        return null;
+        var sql = """
+                SELECT id, name, email, age
+                FROM customer
+                """;
+
+        List<Customer> customers = jdbcTemplate.query(sql, customerRowMapper);
+        return customers;
     }
 
     @Override
