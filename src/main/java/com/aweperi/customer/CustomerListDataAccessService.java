@@ -48,19 +48,19 @@ public class CustomerListDataAccessService implements CustomerDao {
     }
 
     @Override
-    public boolean customerEmailExists(String email) {
+    public boolean existsPersonWithEmail(String email) {
         return mockCustomers.stream()
                 .anyMatch(c -> c.getEmail().equals(email));
     }
 
     @Override
-    public boolean customerIdExists(Integer id) {
+    public boolean existsPersonWithId(Integer id) {
         return mockCustomers.stream()
                 .anyMatch(c -> c.getId().equals(id));
     }
 
     @Override
-    public void removeCustomerById(Integer id) {
+    public void deleteCustomerById(Integer id) {
         mockCustomers = mockCustomers.stream()
                 .filter(c -> !c.getId().equals(id))
                 .toList();

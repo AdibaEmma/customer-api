@@ -33,7 +33,7 @@ public class CustomerService implements ICustomerService {
     @Override
     public void addCustomer(CustomerRegistrationRequest customerRegistrationRequest) {
         String customerEmail = customerRegistrationRequest.email();
-        if (customerDao.customerEmailExists(customerEmail)) {
+        if (customerDao.existsPersonWithEmail(customerEmail)) {
             throw new DuplicateResourceException("email already taken");
         }
 
@@ -57,7 +57,7 @@ public class CustomerService implements ICustomerService {
         }
 
         if (updateRequest.email() != null && !foundCustomer.getEmail().equals(updateRequest.email())) {
-            if (customerDao.customerEmailExists(updateRequest.email())) {
+            if (customerDao.existsPersonWithEmail(updateRequest.email())) {
                 throw new DuplicateResourceException("email already taken");
             }
             foundCustomer.setEmail(updateRequest.email());
@@ -78,10 +78,10 @@ public class CustomerService implements ICustomerService {
 
     @Override
     public void deleteCustomer(Integer id) {
-        if (!customerDao.customerIdExists(id)) {
+        if (!customerDao.existsPersonWithId(id)) {
             throw new ResourceNotFoundException(
                     "customer with id [%s] not found".formatted(id));
         }
-        customerDao.removeCustomerById(id);
+        customerDao.deleteCustomerById(id);
     }
 }
