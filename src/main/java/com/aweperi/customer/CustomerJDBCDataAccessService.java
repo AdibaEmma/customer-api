@@ -91,6 +91,18 @@ public class CustomerJDBCDataAccessService implements CustomerDao{
 
     @Override
     public void updateCustomer(Customer update) {
-
+        var sql = """
+                UPDATE customer
+                SET name = ?, email = ?, age = ?
+                WHERE id = ?
+                """;
+        int updatedRowCount = jdbcTemplate.update(
+                sql,
+                update.getName(),
+                update.getEmail(),
+                update.getAge(),
+                update.getId()
+        );
+        System.out.println("Updated Row(s) Count = " + updatedRowCount);
     }
 }
