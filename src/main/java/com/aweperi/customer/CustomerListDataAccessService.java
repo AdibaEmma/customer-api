@@ -13,14 +13,14 @@ public class CustomerListDataAccessService implements CustomerDao {
     static  {
         mockCustomers = new ArrayList<>();
         var alex = new Customer(
-                1,
+                1L,
                 "Alex",
                 "alex@gmail.com",
                 21
         );
 
         var jamila = new Customer(
-                2,
+                2L,
                 "Jamila",
                 "jamila@gmail.com",
                 19
