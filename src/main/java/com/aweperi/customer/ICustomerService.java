@@ -4,9 +4,9 @@ import java.util.List;
 
 public interface ICustomerService {
     List<Customer> getAllCustomers();
-    Customer getCustomer(Integer id);
+    Customer getCustomer(Long id);
 
     void addCustomer(CustomerRegistrationRequest customerRegistrationRequest);
-    void updateCustomer(Integer id, CustomerUpdateRequest updateRequest);
-    void deleteCustomer(Integer id);
+    void updateCustomer(Long id, CustomerUpdateRequest updateRequest);
+    void deleteCustomer(Long id);
 }

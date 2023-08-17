@@ -23,7 +23,7 @@ public class CustomerService implements ICustomerService {
     }
 
     @Override
-    public Customer getCustomer(Integer id) {
+    public Customer getCustomer(Long id) {
         return customerDao.selectCustomerById(id)
                 .orElseThrow(() ->
                 new ResourceNotFoundException(
@@ -47,7 +47,7 @@ public class CustomerService implements ICustomerService {
     }
 
     @Override
-    public void updateCustomer(Integer id, CustomerUpdateRequest updateRequest) {
+    public void updateCustomer(Long id, CustomerUpdateRequest updateRequest) {
         Customer foundCustomer = getCustomer(id);
         boolean changes = false;
 
@@ -77,7 +77,7 @@ public class CustomerService implements ICustomerService {
     }
 
     @Override
-    public void deleteCustomer(Integer id) {
+    public void deleteCustomer(Long id) {
         if (!customerDao.existsPersonWithId(id)) {
             throw new ResourceNotFoundException(
                     "customer with id [%s] not found".formatted(id));

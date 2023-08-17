@@ -36,7 +36,7 @@ public class CustomerListDataAccessService implements CustomerDao {
     }
 
     @Override
-    public Optional<Customer> selectCustomerById(Integer id) {
+    public Optional<Customer> selectCustomerById(Long id) {
         return mockCustomers.stream()
                 .filter(customer -> customer.getId().equals(id))
                 .findFirst();
@@ -54,13 +54,13 @@ public class CustomerListDataAccessService implements CustomerDao {
     }
 
     @Override
-    public boolean existsPersonWithId(Integer id) {
+    public boolean existsPersonWithId(Long id) {
         return mockCustomers.stream()
                 .anyMatch(c -> c.getId().equals(id));
     }
 
     @Override
-    public void deleteCustomerById(Integer id) {
+    public void deleteCustomerById(Long id) {
         mockCustomers = mockCustomers.stream()
                 .filter(c -> !c.getId().equals(id))
                 .toList();

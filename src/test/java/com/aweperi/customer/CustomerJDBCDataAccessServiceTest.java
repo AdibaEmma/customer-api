@@ -33,17 +33,31 @@ class CustomerJDBCDataAccessServiceTest extends AbstractTestcontainers {
         underTest.insertCustomer(customer);
 
         // When
-        List<Customer> customers = underTest.selectAllCustomers();
+        List<Customer> actual = underTest.selectAllCustomers();
 
         //Then
-        assertThat(customers).isNotEmpty();
+        assertThat(actual).isNotEmpty();
     }
 
     @Test
     void selectCustomerById() {
         // Given
+        String email = FAKER.internet().safeEmailAddress() + UUID.randomUUID();
+        Customer customer = new Customer(
+                FAKER.name().fullName(),
+                email,
+                FAKER.number().numberBetween(16, 99)
+        );
 
+        underTest.insertCustomer(customer);
+
+        Long id = underTest.selectAllCustomers().stream()
+                .filter(c -> c.getEmail().equals(email))
+                .map(Customer::getId)
+                .findFirst()
+                .orElseThrow();
         // When
+        underTest.selectCustomerById(id);
 
         //Then
     }
