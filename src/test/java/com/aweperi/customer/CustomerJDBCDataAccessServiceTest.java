@@ -5,6 +5,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -57,9 +58,15 @@ class CustomerJDBCDataAccessServiceTest extends AbstractTestcontainers {
                 .findFirst()
                 .orElseThrow();
         // When
-        underTest.selectCustomerById(id);
+        Optional<Customer> actual = underTest.selectCustomerById(id);
 
         //Then
+        assertThat(actual).isPresent().hasValueSatisfying(c -> {
+            assertThat(c.getId()).isEqualTo(id);
+            assertThat(c.getName()).isEqualTo(customer.getName());
+            assertThat(c.getEmail()).isEqualTo(customer.getEmail());
+            assertThat(c.getAge()).isEqualTo(customer.getAge());
+        });
     }
 
     @Test
