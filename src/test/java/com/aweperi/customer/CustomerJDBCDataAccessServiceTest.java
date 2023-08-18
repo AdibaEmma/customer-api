@@ -128,10 +128,20 @@ class CustomerJDBCDataAccessServiceTest extends AbstractTestcontainers {
     @Test
     void existsPersonWithEmail() {
         // Given
+        String email = "foobar@example.com";
+        var customer = Customer.builder()
+                .name(FAKER.name().fullName())
+                .email(email)
+                .age(21)
+                .build();
+
+        underTest.insertCustomer(customer);
 
         // When
+        boolean actual = underTest.existsPersonWithEmail(email);
 
         //Then
+        assertThat(actual).isTrue();
     }
 
     @Test
