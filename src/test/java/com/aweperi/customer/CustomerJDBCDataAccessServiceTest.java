@@ -3,12 +3,14 @@ package com.aweperi.customer;
 import com.aweperi.AbstractTestcontainers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.dao.DuplicateKeyException;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class CustomerJDBCDataAccessServiceTest extends AbstractTestcontainers {
     private CustomerJDBCDataAccessService underTest;
@@ -57,6 +59,7 @@ class CustomerJDBCDataAccessServiceTest extends AbstractTestcontainers {
                 .map(Customer::getId)
                 .findFirst()
                 .orElseThrow();
+
         // When
         Optional<Customer> actual = underTest.selectCustomerById(id);
 
@@ -84,10 +87,42 @@ class CustomerJDBCDataAccessServiceTest extends AbstractTestcontainers {
     @Test
     void insertCustomer() {
         // Given
+        String email = "foobar@example.com";
+        var customer = Customer.builder()
+            .name(FAKER.name().fullName())
+            .email(email)
+            .age(21)
+            .build();
 
         // When
+        underTest.insertCustomer(customer);
+        Optional<Customer> actual = underTest.selectAllCustomers().stream()
+                .filter(c -> c.getEmail().equals(email))
+                .findFirst();
 
         //Then
+        assertThat(actual).isPresent().hasValueSatisfying(c -> {
+            assertThat(c.getName()).isEqualTo(customer.getName());
+            assertThat(c.getEmail()).isEqualTo(customer.getEmail());
+            assertThat(c.getAge()).isEqualTo(customer.getAge());
+        });
+    }
+
+    @Test
+    void willThrowDuplicateKeyExceptionWhenDuplicateEmailInInsertCustomer() {
+        // Given
+        String email = "foobar@example.com";
+        var customer = Customer.builder()
+                .name(FAKER.name().fullName())
+                .email(email)
+                .age(21)
+                .build();
+
+        //Then
+       assertThrows(DuplicateKeyException.class, () -> {
+           underTest.insertCustomer(customer);
+           underTest.insertCustomer(customer);
+       });
     }
 
     @Test
