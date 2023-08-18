@@ -87,7 +87,7 @@ class CustomerJDBCDataAccessServiceTest extends AbstractTestcontainers {
     @Test
     void insertCustomer() {
         // Given
-        String email = "foobar@example.com";
+        String email = "foobar2@example.com";
         var customer = Customer.builder()
             .name(FAKER.name().fullName())
             .email(email)
@@ -128,7 +128,7 @@ class CustomerJDBCDataAccessServiceTest extends AbstractTestcontainers {
     @Test
     void existsPersonWithEmail() {
         // Given
-        String email = "foobar@example.com";
+        String email = "randomemail@example.com";
         var customer = Customer.builder()
                 .name(FAKER.name().fullName())
                 .email(email)
@@ -147,27 +147,82 @@ class CustomerJDBCDataAccessServiceTest extends AbstractTestcontainers {
     @Test
     void existsPersonWithId() {
         // Given
+        String email = FAKER.internet().safeEmailAddress() + UUID.randomUUID();
+        Customer customer = new Customer(
+                FAKER.name().fullName(),
+                email,
+                FAKER.number().numberBetween(16, 99)
+        );
+
+        underTest.insertCustomer(customer);
+
+        Long id = underTest.selectAllCustomers().stream()
+                .filter(c -> c.getEmail().equals(email))
+                .map(Customer::getId)
+                .findFirst()
+                .orElseThrow();
 
         // When
+        boolean actual = underTest.existsPersonWithId(id);
 
         //Then
+        assertThat(actual).isTrue();
     }
 
     @Test
     void deleteCustomerById() {
         // Given
+        String email = FAKER.internet().safeEmailAddress() + UUID.randomUUID();
+        Customer customer = new Customer(
+                FAKER.name().fullName(),
+                email,
+                FAKER.number().numberBetween(16, 99)
+        );
+
+        underTest.insertCustomer(customer);
+
+        Long id = underTest.selectAllCustomers().stream()
+                .filter(c -> c.getEmail().equals(email))
+                .map(Customer::getId)
+                .findFirst()
+                .orElseThrow();
 
         // When
+        underTest.deleteCustomerById(id);
+        boolean actual = underTest.existsPersonWithId(id);
 
         //Then
+        assertThat(actual).isFalse();
     }
 
     @Test
     void updateCustomer() {
         // Given
+        String email = FAKER.internet().safeEmailAddress() + UUID.randomUUID();
+        Customer customer = new Customer(
+                FAKER.name().fullName(),
+                email,
+                22
+        );
+
+        underTest.insertCustomer(customer);
+
+        Customer actual = underTest.selectAllCustomers().stream()
+                .filter(c -> c.getEmail().equals(email))
+                .findFirst()
+                .orElseThrow();
+
+        var expected = Customer.builder()
+                .name(FAKER.name().fullName())
+                .email(email)
+                .age(21)
+                .build();
 
         // When
+        underTest.updateCustomer(expected);
 
         //Then
+        assertThat(expected.getName()).isNotEqualTo(actual.getName());
+        assertThat(expected.getAge()).isNotEqualTo(actual.getAge());
     }
 }
