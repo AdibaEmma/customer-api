@@ -56,7 +56,7 @@ public class CustomerJDBCDataAccessService implements CustomerDao{
     }
 
     @Override
-    public boolean existsPersonWithEmail(String email) {
+    public boolean existsCustomerWithEmail(String email) {
         var sql = """
                 SELECT COUNT(id)
                 FROM customer
@@ -68,7 +68,7 @@ public class CustomerJDBCDataAccessService implements CustomerDao{
     }
 
     @Override
-    public boolean existsPersonWithId(Long id) {
+    public boolean existsCustomerWithId(Long id) {
         var sql = """
                 SELECT COUNT(id)
                 FROM customer
@@ -120,6 +120,5 @@ public class CustomerJDBCDataAccessService implements CustomerDao{
             );
             System.out.println("update customer age result = " + result);
         }
-
     }
 }
