@@ -87,7 +87,7 @@ class CustomerJDBCDataAccessServiceTest extends AbstractTestcontainers {
     @Test
     void insertCustomer() {
         // Given
-        String email = "foobar2@example.com";
+        String email = FAKER.internet().safeEmailAddress() + UUID.randomUUID();
         var customer = Customer.builder()
             .name(FAKER.name().fullName())
             .email(email)
@@ -111,7 +111,7 @@ class CustomerJDBCDataAccessServiceTest extends AbstractTestcontainers {
     @Test
     void willThrowDuplicateKeyExceptionWhenDuplicateEmailInInsertCustomer() {
         // Given
-        String email = "foobar@example.com";
+        String email = FAKER.internet().safeEmailAddress() + UUID.randomUUID();
         var customer = Customer.builder()
                 .name(FAKER.name().fullName())
                 .email(email)
@@ -128,7 +128,7 @@ class CustomerJDBCDataAccessServiceTest extends AbstractTestcontainers {
     @Test
     void existsPersonWithEmail() {
         // Given
-        String email = "randomemail@example.com";
+        String email = FAKER.internet().safeEmailAddress() + UUID.randomUUID();
         var customer = Customer.builder()
                 .name(FAKER.name().fullName())
                 .email(email)
