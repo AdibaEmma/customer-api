@@ -1,9 +1,11 @@
 package com.aweperi.customer;
 
+import com.aweperi.exception.DuplicateResourceException;
 import com.aweperi.exception.ResourceNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -11,8 +13,7 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class CustomerServiceTest {
@@ -72,10 +73,49 @@ class CustomerServiceTest {
     @Test
     void addCustomer() {
         // Given
+        String email = "alex@gmail.com";
+
+        when(customerDao.existsCustomerWithEmail(email)).thenReturn(false);
+
+        CustomerRegistrationRequest request = new CustomerRegistrationRequest(
+                "Alex", email, 19
+        );
 
         // When
+        underTest.addCustomer(request);
 
         //Then
+        ArgumentCaptor<Customer> customerArgumentCaptor = ArgumentCaptor.forClass(Customer.class);
+
+        verify(customerDao).insertCustomer(customerArgumentCaptor.capture());
+
+        Customer capturedCustomer = customerArgumentCaptor.getValue();
+        assertThat(capturedCustomer.getId()).isNull();
+        assertThat(capturedCustomer.getName()).isEqualTo(request.name());
+        assertThat(capturedCustomer.getEmail()).isEqualTo(request.email());
+        assertThat(capturedCustomer.getAge()).isEqualTo(request.age());
+    }
+
+    @Test
+    void willThrowDuplicateResourceExceptionWhenEmailExistsForAddCustomer() {
+        // Given
+        String email = "alex@gmail.com";
+
+        when(customerDao.existsCustomerWithEmail(email)).thenReturn(true);
+
+        CustomerRegistrationRequest request = new CustomerRegistrationRequest(
+                "Alex", email, 19
+        );
+
+        // When
+        assertThatThrownBy(() -> underTest.addCustomer(request))
+                .isInstanceOf(DuplicateResourceException.class)
+                .hasMessage(
+                        "email already taken"
+                );
+
+        // Then
+        verify(customerDao, never()).insertCustomer(any());
     }
 
     @Test
