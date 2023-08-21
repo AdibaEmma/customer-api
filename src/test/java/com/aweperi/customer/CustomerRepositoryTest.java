@@ -19,7 +19,7 @@ class CustomerRepositoryTest extends AbstractTestcontainers {
 
     @BeforeEach
     void setUp() {
-
+        underTest.deleteAll();
     }
 
     @Test
@@ -43,6 +43,18 @@ class CustomerRepositoryTest extends AbstractTestcontainers {
     }
 
     @Test
+    void willReturnFalseWhenEmailNotExistsInExistsCustomerByEmail() {
+        // Given
+        String email = FAKER.internet().safeEmailAddress() + UUID.randomUUID();
+
+        // When
+        var actual = underTest.existsCustomerByEmail(email);
+
+        //Then
+        assertThat(actual).isFalse();
+    }
+
+    @Test
     void existsCustomersById() {
         // Given
         String email = FAKER.internet().safeEmailAddress() + UUID.randomUUID();
@@ -61,9 +73,21 @@ class CustomerRepositoryTest extends AbstractTestcontainers {
                 .orElseThrow();
 
         // When
-        var actual = underTest.existsCustomersById(id);
+        var actual = underTest.existsCustomerById(id);
 
         //Then
         assertThat(actual).isTrue();
+    }
+
+    @Test
+    void willReturnFalseWhenIdNotExistsInExistsCustomerById() {
+        // Given
+       Long id = -1L;
+
+        // When
+        var actual = underTest.existsCustomerById(id);
+
+        //Then
+        assertThat(actual).isFalse();
     }
 }
