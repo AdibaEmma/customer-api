@@ -6,6 +6,9 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+
 class CustomerJPADataAccessServiceTest {
     private CustomerJPADataAccessService underTest;
     @Mock
@@ -24,11 +27,12 @@ class CustomerJPADataAccessServiceTest {
 
     @Test
     void selectAllCustomers() {
-        // Given
-
         // When
+        underTest.selectAllCustomers();
 
         //Then
+        verify(customerRepository, times(1))
+                .findAll();
     }
 
     @Test
