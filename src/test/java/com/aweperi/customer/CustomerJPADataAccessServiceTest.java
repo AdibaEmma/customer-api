@@ -38,54 +38,82 @@ class CustomerJPADataAccessServiceTest {
     @Test
     void selectCustomerById() {
         // Given
+        Long id = 1L;
 
         // When
+        underTest.selectCustomerById(id);
 
         //Then
+        verify(customerRepository).findById(id);
     }
 
     @Test
     void insertCustomer() {
         // Given
+        var customer =
+                Customer.builder()
+                        .id(1L)
+                        .name("Test name")
+                        .email("testemail@example.com")
+                        .age(22)
+                        .build();
 
         // When
+        underTest.insertCustomer(customer);
 
         //Then
+        verify(customerRepository).save(customer);
     }
 
     @Test
     void existsCustomerWithEmail() {
         // Given
+        String email = "random.email@example.com";
 
         // When
+        underTest.existsCustomerWithEmail(email);
 
         //Then
+        verify(customerRepository).existsCustomerByEmail(email);
     }
 
     @Test
     void existsCustomerWithId() {
         // Given
+        Long id = 1L;
 
         // When
+        underTest.existsCustomerWithId(id);
 
         //Then
+        verify(customerRepository).existsCustomerById(id);
     }
 
     @Test
     void deleteCustomerById() {
         // Given
+        Long id = 1L;
 
         // When
+        underTest.deleteCustomerById(id);
 
         //Then
+        verify(customerRepository).deleteById(id);
     }
 
     @Test
     void updateCustomer() {
         // Given
+        var update =
+                Customer.builder()
+                        .name("Test name")
+                        .email("testemail@example.com")
+                        .build();
 
         // When
+        underTest.updateCustomer(update);
 
         //Then
+        verify(customerRepository).save(update);
     }
 }
