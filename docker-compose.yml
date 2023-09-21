@@ -13,6 +13,18 @@ services:
     networks:
       - db
     restart: unless-stopped
+  aweperi-api:
+    container_name: aweperi-api
+    image: aweperi/aweperi-api
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/customers
+    ports:
+      - "5005:5000"
+    networks:
+      - db
+    depends_on:
+      - db
+    restart: unless-stopped
 
 networks:
   db:
